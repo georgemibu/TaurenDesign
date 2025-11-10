@@ -1,0 +1,705 @@
+:root{
+  /* Paleta - Natural Tech Pro */
+  --black: #1A1A1A;
+  --cream: #F4F3EF;
+  --olive: #6C8C74;
+  --whatsapp-green: #25D366;
+  --blue: #007AFF; /* Tono de azul más estándar y vibrante */
+  --gray: #BEBDB8;
+  --darkgray: #6C7075;
+  --white: #ffffff;
+
+  /* Espaciados / medidas */
+  --page-padding: 20px;
+  --radius-card: 12px;
+  --radius-btn: 12px; /* Botones más redondeados */
+
+  /* Tipografía */
+  --font-sans: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Reset ligero */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  background:var(--cream);
+  color:var(--black);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  -webkit-text-size-adjust:100%;
+  transition: background-color 0.3s ease;
+}
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* Container (simulate mobile width inside larger screens) */
+.viewport {
+  max-width: 420px; /* allow some room on desktop */
+  margin: 0 auto;
+  /* Fondo "Aurora": Múltiples gradientes radiales para un efecto de luz suave y profundo */
+  background-color: var(--cream);
+  background-image: 
+    radial-gradient(at 80% 10%, hsla(45, 100%, 95%, 0.4) 0px, transparent 50%),
+    radial-gradient(at 20% 90%, hsla(130, 30%, 80%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 50% 30%, hsla(210, 100%, 85%, 0.3) 0px, transparent 50%),
+    radial-gradient(at 90% 85%, hsla(130, 30%, 90%, 0.3) 0px, transparent 50%);
+  min-height:100vh;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.05); /* Sombra más suave y difusa */
+  position: relative;
+  overflow-x: hidden; /* Previene cualquier desbordamiento horizontal */
+}
+
+main{padding: 0 0 48px;}
+
+/* NAVBAR */
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding: 16px var(--page-padding);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.nav--scrolled {
+  background-color: rgba(244, 243, 239, 0.8); /* --cream con transparencia */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  /* En escritorio, la barra se encoge ligeramente al hacer scroll */
+  transform: scale(0.98);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:700;
+  letter-spacing:0.2px;
+  font-size:18px;
+}
+.brand .dot{
+  width:34px;height:34px;border-radius:8px;background:linear-gradient(180deg,var(--olive), #547f66);
+  display:inline-block;
+}
+.nav-links {
+  display: none; /* Oculto en móvil */
+}
+.menu-btn{
+  background:transparent;
+  border:0;
+  padding:8px;
+  border-radius:8px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1001;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.menu-btn .line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: var(--black);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  margin: 0 auto;
+}
+.menu-btn[aria-expanded="true"] .line-top {
+  transform: translateY(7px) rotate(45deg);
+}
+.menu-btn[aria-expanded="true"] .line-middle {
+  opacity: 0;
+}
+.menu-btn[aria-expanded="true"] .line-bottom {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --- Menu Overlay --- */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(244, 243, 239, 0.95); /* --cream con transparencia */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.menu-overlay[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+}
+.menu-link {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--black);
+  /* Añadimos un pequeño margen para separar los links del botón principal */
+  &:last-of-type {
+    margin-bottom: 16px;
+  }
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.menu-link:hover { color: var(--blue); }
+
+.menu-socials {
+  display: flex;
+  gap: 24px;
+  margin-top: 40px;
+}
+.menu-socials .social-icon {
+  width: 28px; /* Íconos un poco más grandes en el menú */
+  height: 28px;
+}
+
+/* HERO */
+.hero{
+  padding: 48px var(--page-padding) 28px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  align-items:flex-start;
+  min-height:60vh; /* target approx 60vh on mobile */
+  padding-bottom: 48px; /* Más espacio en la parte inferior del hero en móvil */
+}
+.hero h1{
+  margin:0;
+  font-size:32px;
+  line-height:1.1;
+  font-weight:700;
+  margin-bottom: 16px; /* Más espacio debajo del título */
+  /* Gradiente de texto para el titular principal */
+  background: linear-gradient(90deg, var(--blue) 0%, var(--olive) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.hero p {
+  margin:0;
+  font-size:18px;
+  line-height:1.45;
+  color:var(--darkgray);
+  margin-bottom: 24px; /* Más espacio debajo del párrafo */
+  max-width:335px;
+}
+.hero .ctas{
+  display:flex;
+  gap:12px;
+  margin-top:12px;
+  width:100%;
+}
+.hero-socials {
+  display: flex;
+  gap: 24px;
+  justify-content: flex-start;
+  margin-top: 32px;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:12px 16px;
+  border-radius:var(--radius-btn);
+  font-weight:600;
+  cursor:pointer;
+  border:0;
+  transition: all 0.2s ease; /* Transición suave para todos los botones */
+}
+.btn-primary{
+  background: var(--blue);
+  color:var(--white);
+  width:100%;
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15), 0 1px 3px rgba(0, 122, 255, 0.2);
+}
+.btn-primary:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 122, 255, 0.18), 0 2px 6px rgba(0, 122, 255, 0.22);
+}
+.btn-ghost{
+  background: var(--white);
+  color:var(--darkgray);
+  border:1px solid #EAEAEA; /* Borde más definido */
+  width:100%;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+.btn-ghost:hover {
+  border-color: #DDDDDD;
+  color: var(--black);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+}
+
+/* mockup placeholder */
+.mockup{
+  margin-top:auto;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  /* Aplicamos el parallax translateY y la transición */
+  transform: translateY(var(--parallax-y, 0px));
+}
+.device{
+  width:220px;
+  height:140px;
+  border-radius:8px;
+  background: var(--white);
+  border:1px solid #EAEAEA;
+  box-shadow: 0 15px 30px -10px rgba(0,0,0,0.08);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+.device-header {
+  display: block;
+  padding: 4px 0;
+  flex-shrink: 0;
+}
+.device-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #E0E0E0;
+  margin-right: 6px;
+}
+.device-content {
+  flex-grow: 1;
+  background-color: #F8F8F8;
+  border-radius: 4px;
+  /* Imagen de prueba para el mockup */
+  background-image: url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80');
+  background-size: cover;
+  background-position: center;
+}
+
+/* --- Scroll Animation States --- */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* SECTION headings */
+.section{
+  padding: 20px var(--page-padding);
+}
+.section h2{
+  margin:0 0 8px 0;
+  font-size:22px;
+  font-weight:700;
+  position: relative; /* Para posicionar el pseudo-elemento */
+  padding-bottom: 10px; /* Espacio entre el texto y la línea */
+}
+.section h2::after {
+  content: '';
+  position: absolute;
+  left: 0; /* Alineado a la izquierda por defecto */
+  bottom: 0;
+  width: 60px; /* Longitud de la línea de acento */
+  height: 3px; /* Grosor de la línea */
+  background: linear-gradient(90deg, var(--blue) 0%, var(--olive) 100%); /* Gradiente */
+  border-radius: 2px; /* Bordes ligeramente redondeados */
+}
+.section p.lead{
+  margin:0 0 16px 0;
+  color:var(--darkgray);
+  font-size:15px;
+}
+
+/* Cards (services) */
+.cards{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  grid-template-columns: 1fr; /* Una columna en móvil */
+}
+
+.card-visual {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  color: var(--white);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+.card-visual:hover {
+  transform: scale(1.03);
+}
+.card-visual-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  transition: transform 0.4s ease;
+}
+.card-visual:hover .card-visual-bg {
+  transform: scale(1.1);
+}
+.card-visual::after { /* Superposición de color */
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.8) 100%);
+  z-index: 2;
+}
+.card-visual-content {
+  position: relative;
+  z-index: 3;
+}
+.card-visual h3 { margin: 0 0 4px 0; font-size: 20px; }
+.card-visual p { margin: 0; font-size: 14px; line-height: 1.4; color: rgba(255,255,255,0.8); }
+
+/* --- Feature List (Benefits & Process) --- */
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 16px;
+  border-radius: var(--radius-card);
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+.feature-item:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.feature-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px; /* Ligeramente más redondeado */
+  background: linear-gradient(135deg, var(--white) 0%, #F8F8F8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+/* Aplicamos gradiente a los números también */
+.feature-icon .feature-num { 
+  font-size: 18px; font-weight: 700; color: var(--white); 
+  background: linear-gradient(135deg, var(--blue) 0%, #1f6fe6 100%); 
+  width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+}
+.feature-text h4 { margin: 0 0 4px 0; font-size: 16px; font-weight: 700; }
+.feature-text p { margin: 0; color: var(--darkgray); font-size: 14px; line-height: 1.5; }
+
+/* Staggering (escalonamiento) de animaciones con CSS puro */
+.animate-on-scroll.is-visible {
+  transition-delay: var(--delay, 0s);
+}
+.card-visual.animate-on-scroll:nth-child(2) { --delay: 100ms; }
+.card-visual.animate-on-scroll:nth-child(3) { --delay: 200ms; }
+.card-visual.animate-on-scroll:nth-child(4) { --delay: 300ms; }
+.feature-item.animate-on-scroll:nth-child(2) { --delay: 100ms; }
+.feature-item.animate-on-scroll:nth-child(3) { --delay: 200ms; }
+.feature-item.animate-on-scroll:nth-child(4) { --delay: 300ms; }
+
+/* footer */
+footer{
+  padding:28px var(--page-padding);
+  font-size:13px;
+  color:var(--darkgray);
+  border-top:1px solid #F0F0F0;
+}
+.footer-content {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom: 16px;
+}
+.footer-brand { display:flex; gap:12px; align-items:center; }
+.footer-brand .dot { width:26px; height:26px; border-radius:6px; background: var(--olive); }
+.footer-brand .brand-name { font-weight:700; color: var(--black); }
+.footer-contact { text-align:right; }
+.email-link {
+  font-weight:600;
+  color: var(--black);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.socials{display:flex;gap:20px;margin-top:8px; justify-content:flex-end;}
+.social-icon{ /* Aumentamos el tamaño de los íconos en el footer */
+  width: 28px;
+  height: 28px;
+  color:var(--darkgray);text-decoration:none;font-weight:600;
+  transition: color 0.2s ease;
+}
+.social-icon:hover { 
+  color: var(--blue); 
+  transform: scale(1.1);
+}
+.footer-copy { color:var(--gray); font-size:12px; }
+.email-link:hover { color: var(--blue); }
+
+/* --- Contact Form --- */
+.contact-section {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: var(--darkgray);
+}
+.form-group input,
+.form-group textarea {
+  padding: 12px 16px;
+  border-radius: var(--radius-btn);
+  border: 1px solid #EAEAEA;
+  background-color: var(--white);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+.form-group textarea { resize: vertical; }
+
+/* --- Responsive --- */
+
+/* Floating Action Button */
+.fab {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  background-color: var(--whatsapp-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  z-index: 999;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--white);
+}
+
+.fab:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+
+/* Tablet (y superior) */
+@media(min-width: 768px){
+  .viewport{
+    max-width: 760px;
+  }
+  .hero, .section {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+  .hero {
+    align-items: center; /* Centramos los elementos del hero */
+    text-align: center; /* Centramos el texto dentro del hero */
+  }
+  .hero h1 {
+    font-size: 38px;
+    max-width: 500px;
+  }
+  .section h2 {
+    margin-bottom: 30px; /* Ajustamos el margen para desktop */
+  }
+  .section h2::after {
+    left: 50%; /* Centramos la línea en desktop */
+    transform: translateX(-50%); /* Ajuste para centrar */
+  }
+  .hero p {
+    max-width: 450px;
+  }
+  .hero .ctas {
+    justify-content: center; /* Centramos los botones */
+  }
+  .hero-socials {
+    justify-content: center; /* Centramos los iconos sociales en tablet */
+  }
+  .hero h1 {
+    margin-bottom: 24px; /* Ajustamos el espacio en tablet */
+  }
+  .hero p { margin-bottom: 32px; } /* Ajustamos el espacio en tablet */
+  .btn {
+    width: auto;
+    min-width: 180px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en tablet */
+    gap: 24px;
+  }
+  .device {
+    width: 400px; /* Aumentamos el ancho del mockup */
+    height: 250px; /* y su altura para mantener la proporción */
+  }
+}
+
+/* Desktop (y superior) */
+@media(min-width: 1024px){
+  .viewport{
+    max-width: 1200px; /* Hacemos el contenedor un poco más ancho */
+  }
+  .hero {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 64px; /* Más espacio entre texto y mockup */
+    padding-top: 60px;
+    padding-bottom: 60px;
+    min-height: auto;
+  }
+  .hero-content {
+    flex: 1;
+  }
+  .hero h1 {
+    font-size: 48px;
+    max-width: none;
+    margin-bottom: 24px; /* Más espacio debajo del título en desktop */
+    text-align: left; /* Alineamos a la izquierda en desktop */
+  }
+  .hero p {
+    font-size: 20px;
+    max-width: 500px;
+  }
+  .mockup {
+    margin-left: 32px; /* Añadimos un margen izquierdo al mockup en desktop */
+    flex: 1;
+    margin-top: 0;
+    max-width: 500px; /* Un poco más grande */
+    /* Combinamos el efecto 3D estático con el parallax */
+    transform: perspective(1500px) rotateY(-15deg) translateY(var(--parallax-y, 0px));
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  .mockup:hover {
+    transform: perspective(1500px) rotateY(0deg) translateY(var(--parallax-y, 0px));
+  }
+  .device {
+    width: 100%; /* Aseguramos que ocupe todo el ancho disponible */
+    height: 300px;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+  }
+  .section {
+    padding-top: 64px; /* Más aire entre secciones */
+    padding-bottom: 64px;
+  }
+  .section h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 30px; /* Ajustamos el margen para desktop */
+  }
+  .section p.lead {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 48px; /* Más espacio entre el subtítulo y el contenido */
+  }
+  .cards {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas para que las tarjetas sean más grandes */
+    gap: 24px;
+  }
+  .feature-list {
+    grid-template-columns: repeat(2, 1fr); /* Mantenemos 2 columnas para dar más espacio y legibilidad */
+  }
+  .menu-btn { display: none; } /* Ocultamos el botón de menú en escritorio */
+  .menu-overlay { display: none; } /* Ocultamos el overlay en escritorio */
+  .nav {
+    /* Estilos para la barra flotante en escritorio */
+    top: 16px;
+    max-width: 900px;
+    margin: 0 auto;
+    border-radius: 16px;
+    border: 1px solid rgba(0,0,0,0.03);
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+  .nav--scrolled {
+    transform: scale(1); /* Anulamos el encogimiento en escritorio */
+    background-color: rgba(244, 243, 239, 0.8);
+  }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    /* Alineamos los links de navegación a la derecha */
+    margin-left: auto;
+    margin-right: 0;
+  }
+  .nav-link {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--darkgray);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover { color: var(--black); }
+  .hero-content {
+    text-align: left; /* Alineamos el contenido del hero a la izquierda en desktop */
+  }
+  .hero .ctas { justify-content: flex-start; } /* Alineamos los botones a la izquierda en desktop */
+  .hero-socials {
+    justify-content: flex-start; /* Alineamos los iconos a la izquierda en desktop */
+  }
+  .fab {
+    bottom: 32px; right: 32px; width: 60px; height: 60px;
+  }
+}
